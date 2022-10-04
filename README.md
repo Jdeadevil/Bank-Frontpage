@@ -3,7 +3,8 @@ This is just another project to test the Sqlite3 module and just experiment with
 
 # Requirements
 For this project I used:
-Sqlit3
-Tkinter
-Custom Tkinter
-Pillow
+
+- Sqlit3
+- Tkinter
+- Custom Tkinter
+- Pillow

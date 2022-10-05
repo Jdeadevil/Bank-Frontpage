@@ -92,6 +92,11 @@ class LoginScreen:
             conn.commit()
             conn.close()
             conn.close()
+
+            self.login_entry.delete(0, 'end')
+            self.password_entry.delete(0, 'end')
+
+            self.validation_text.configure(text_color='#118408', text="Thanks for registering!\nCome on in! :)")
         else:
             self.login_header.configure(text="Register")
             self.state = 'register'

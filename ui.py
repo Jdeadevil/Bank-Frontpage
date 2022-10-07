@@ -11,3 +11,6 @@ class Fonts:
 class Colours:
     SUCCESS = '#118408'
     FAILURE = '#7c0000'
+    STANDARD_BG = '#dedede'
+
+

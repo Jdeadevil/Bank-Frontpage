@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk, Image
 import customtkinter
 import sqlite3
@@ -10,59 +11,99 @@ class LoginScreen:
 
         self.state = 'login'
 
+        # Image Frame 
         self.image_frame = customtkinter.CTkFrame(width=643, height=429)
-        self.image_frame.pack()
+        self.image_frame.grid(row=0, column=0, sticky="EW")
 
+        # Image Frame > Image
         self.splash = ImageTk.PhotoImage(Image.open("splash_screen_trimmed.jpg"))
-
         self.image_label = customtkinter.CTkLabel(
             self.image_frame, text_font=ui.Fonts.SMALLER_FONT, image=self.splash)
-        self.image_label.pack()
+        self.image_label.grid(row=0, column=0)
 
-        self.fields_container = customtkinter.CTkFrame()
-        self.fields_container.place(anchor="nw", height=214, width=643, x=0, y=429)
+        # Fields Container 
+        self.fields_container = customtkinter.CTkFrame(
+            height=214, width=643)
+        self.fields_container.grid(row=1, column=0)
 
+        # Fields Container > Space 
+        self.space = customtkinter.CTkFrame(
+            self.fields_container, height=10, width=643, fg_color=ui.Colours.STANDARD_BG)
+        self.space.grid(row=0, column=0)
+
+        # Fields Container > Login Header 
         self.login_header = customtkinter.CTkLabel(
             self.fields_container, text="Login", text_font=ui.Fonts.HEADER_FONT, padx=0, pady=0)
-        self.login_header.place(anchor="center", x=322, y=29)
+        self.login_header.grid(row=1, column=0)
 
+        # Fields Container > Space 
+        self.space = customtkinter.CTkFrame(
+            self.fields_container, height=12, width=643, fg_color=ui.Colours.STANDARD_BG)
+        self.space.grid(row=2, column=0)
+
+        # Fields Container > Fields 
+        self.fields = customtkinter.CTkFrame(
+            self.fields_container, height=78, width=354, fg_color=ui.Colours.STANDARD_BG)
+        self.fields.grid(row=3, column=0)
+
+        # Fields Container > Fields > Login Username 
         self.login_username = customtkinter.CTkLabel(
-            self.fields_container, anchor="w", text="Username: ", text_font=ui.Fonts.SMALLER_FONT)
-        self.login_username.place(anchor="center", x=205, y=76)
+            self.fields, text="Username: ", text_font=ui.Fonts.SMALLER_FONT)
+        self.login_username.grid(row=0, column=0, padx="10 0")
 
+        # Fields Container > Fields > Space
+        self.space = customtkinter.CTkFrame(
+            self.fields, height=22, width=50, fg_color=ui.Colours.STANDARD_BG)
+        self.space.grid(row=1, column=0)
+
+        # Fields Container > Fields > Login Password 
         self.login_password = customtkinter.CTkLabel(
-            self.fields_container, anchor="w", text="Password: ", text_font=ui.Fonts.SMALLER_FONT)
-        self.login_password.place(anchor="center", x=204, y=124)
+            self.fields, text="Password: ", text_font=ui.Fonts.SMALLER_FONT)
+        self.login_password.grid(row=2, column=0, padx="10 0")
 
-        self.login_entry = customtkinter.CTkEntry(self.fields_container, width=230)
-        self.login_entry.place(anchor="center", x=373, y=75)
+        # Fields Container > Fields > Username Entry 
+        self.login_entry = customtkinter.CTkEntry(self.fields, width=230)
+        self.login_entry.grid(row=0, column=1, padx="0 50")
 
+        # Fields Container > Fields > Password Entry 
         self.password_entry = customtkinter.CTkEntry(
-            self.fields_container, width=230, show="*")
-        self.password_entry.place(anchor="center", x=373, y=125)
+            self.fields, width=230, show="*")
+        self.password_entry.grid(row=2, column=1, padx="0 50")
 
+        # Fields Container > Space 
+        self.space = customtkinter.CTkFrame(
+            self.fields_container, height=22, width=643, fg_color=ui.Colours.STANDARD_BG)
+        self.space.grid(row=4, column=0)
+
+        # Fields Container > Buttons Frame 
+        self.buttons_frame = customtkinter.CTkFrame(
+            self.fields_container, height=28, width=226, fg_color=ui.Colours.STANDARD_BG)
+        self.buttons_frame.grid(row=5, column=0)
+
+        # Fields Container > Buttons Frame > Login 
         self.login_button = customtkinter.CTkButton(
-            self.fields_container,
+            self.buttons_frame,
             text="Login",
             text_font=ui.Fonts.SMALLER_FONT,
             corner_radius=30,
             width=120,
             command=self.validate_database)
-        self.login_button.place(anchor="center", x=249, y=175)
+        self.login_button.grid(row=0, column=0, padx="0 28")
 
+        # Fields Container > Buttons Frame > Register 
         self.register_button = customtkinter.CTkButton(
-            self.fields_container,
+            self.buttons_frame,
             text="Register",
             text_font=ui.Fonts.SMALLER_FONT,
             corner_radius=30,
             width=120,
             command=self.register_button)
-        self.register_button.place(anchor="center", x=395, y=175)
+        self.register_button.grid(row=0, column=1)
 
-        # Validation Text
-        self.validation_text = customtkinter.CTkLabel(
-            self.fields_container, text="", text_font=ui.Fonts.EVEN_SMALLER_FONT)
-        self.validation_text.place(anchor="center", x=545, y=175)
+        # Fields Container > Space
+        self.space = customtkinter.CTkFrame(
+            self.fields_container, height=32, width=643, fg_color=ui.Colours.STANDARD_BG)
+        self.space.grid(row=6, column=0)
 
     def register_button(self):
         if self.state == 'register':
@@ -76,12 +117,12 @@ class LoginScreen:
 
             conn.commit()
             conn.close()
-            conn.close()
 
+            messagebox.showinfo(
+                "Congratulations!",
+                "Thanks for registering, you may now login with your provided details.")
             self.login_entry.delete(0, 'end')
             self.password_entry.delete(0, 'end')
-
-            self.validation_text.configure(text_color=ui.Colours.SUCCESS, text="Thanks for registering!\nCome on in! :)")
         else:
             self.login_header.configure(text="Register")
             self.state = 'register'
@@ -93,10 +134,15 @@ class LoginScreen:
         c.execute("SELECT * FROM customers")
         for index in c.fetchall():
             if index[0] == self.login_entry.get() and index[1] == self.password_entry.get():
-                self.validation_text.configure(text_color=ui.Colours.SUCCESS, text="Correct!\nCome on in! :)")
+                messagebox.showinfo(
+                    "Congratulations!",
+                    f"You have now successfully logged in and can now use our services.")
                 break
             else:
-                self.validation_text.configure(text_color=ui.Colours.FAILURE, text="Incorrect Username\nand/or Password")
+                messagebox.showinfo(
+                    "Wrong information",
+                    "Incorrect Username and/or Password")
+                break
 
         conn.commit()
         conn.close()
